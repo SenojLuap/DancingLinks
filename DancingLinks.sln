@@ -5,6 +5,11 @@ VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DancingLinksLib", "DancingLinksLib\DancingLinksLib.csproj", "{00CD760C-A03E-464F-B1F9-D099203E9131}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DancingLinksLibTest", "DancingLinksLibTest\DancingLinksLibTest.csproj", "{6397B13F-A8C0-4D07-9586-361F559129E2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{00CD760C-A03E-464F-B1F9-D099203E9131} = {00CD760C-A03E-464F-B1F9-D099203E9131}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +20,10 @@ Global
 		{00CD760C-A03E-464F-B1F9-D099203E9131}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00CD760C-A03E-464F-B1F9-D099203E9131}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00CD760C-A03E-464F-B1F9-D099203E9131}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6397B13F-A8C0-4D07-9586-361F559129E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6397B13F-A8C0-4D07-9586-361F559129E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6397B13F-A8C0-4D07-9586-361F559129E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6397B13F-A8C0-4D07-9586-361F559129E2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
