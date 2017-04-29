@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 
 namespace DLX {
     public class Node {
@@ -93,64 +94,34 @@ namespace DLX {
 
 
 	/// <summary>
-	///   The length of the node list horizonally.
+	///   Remove this row from the matrix.
 	/// </summary>
-	public int CountRight() {
-	    if (right != null) return right.CountRight() + 1;
-	    return 1;
+	public void RemoveRow() {
+	    for (Node current = right; current != this; current = current.right)
+		current.RemoveFromColumn();
 	}
 
 
 	/// <summary>
-	///   The length of the node vertically.
+	///   Return this row to the matrix.
 	/// </summary>
-	public int CountDown() {
-	    if (down != null) return down.CountDown() + 1;
-	    return 1;
+	public void RestoreRow() {
+	    for (Node current = left; current != this; current = current.left)
+		current.ReturnToColumn();
 	}
 
 
 	/// <summary>
-	///   Get the node 'index' positions to the right.
+	///   Get the entire row, as a solution subset.
 	/// </summary>
-	public Node Right(int index) {
-	    if (index == 0 ||
-		right == null)
-		return this;
-	    return right.Right(index-1);
-	}
-
-
-	/// <summary>
-	///   Get the node 'index' positions to the left.
-	/// </summary>
-	public Node Left(int index) {
-	    if (index == 0 ||
-		left == null)
-		return this;
-	    return left.Left(index-1);
-	}
-
-
-	/// <summary>
-	///   Get the node 'index' positions below.
-	/// </summary>
-	public Node Down(int index) {
-	    if (index == 0 ||
-		down == null)
-		return this;
-	    return down.Down(index-1);
-	}
-
-
-	/// <summary>
-	///   Get the node 'index' positions above.
-	/// </summary>
-	public Node Up(int index) {
-	    if (index == 0 ||
-		up == null)
-		return this;
-	    return up.Up(index-1);
+	public int[] Row() {
+	    List<int> res = new List<int>();
+	    Node current = this;
+	    do {
+		res.Add(current.columnHeader.column);
+		current = current.right;
+	    } while (current != this);
+	    return res.ToArray();
 	}
 
 

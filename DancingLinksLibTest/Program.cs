@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 using DLX;
 
@@ -12,6 +13,7 @@ namespace DancingLinksLibTest {
 
 	    DLXSolver solver = new DLXSolver();
 	    
+	    /*
 	    int[,] matrix = new int[,]
 		{ {0, 0, 1, 0, 1, 1, 0},
 		  {1, 0, 0, 1, 0, 0, 1},
@@ -19,24 +21,67 @@ namespace DancingLinksLibTest {
 		  {1, 0, 0, 1, 0, 0, 0},
 		  {0, 1, 0, 0, 0, 0, 1},
 		  {0, 0, 0, 1, 1, 0, 1} };
-		
-	    Node header = solver.GetMatrix(matrix);
-	    Node current = header;
-	    /*
-	    do {
-		current.Dump();
-		current = current.right;
-	    } while (current != header);
 	    */
-	    current = current.right;
-	    do {
-		System.Console.WriteLine("Column: " + ((Header)current).column);
-		System.Console.WriteLine("--Count: " + ((Header)current).count);
-		for (Node row = current.down; row != current; row = row.down) {
-		    row.DumpRow();
+	    int[,] matrix = new int[,]
+		{ {1, 0, 0, 1, 0, 0, 1},
+		  {1, 0, 0, 1, 0, 0, 0},
+		  {0, 0, 0, 1, 1, 0, 1},
+		  {0, 0, 1, 0, 1, 1, 0},
+		  {0, 1, 1, 0, 0, 1, 1},
+		  {0, 1, 0, 0, 0, 0, 1} };
+		
+	    if (solver.Solve(matrix)) {
+		foreach (var solution in solver.solutions) {
+		    System.Console.WriteLine("{ ");
+		    foreach (int[] row in solution) {
+			System.Console.Write("  [");
+			foreach (int column in row) {
+			    System.Console.Write("" + column + " ");
+			}
+			System.Console.WriteLine("]");
+		    }
+		    System.Console.WriteLine("}");
 		}
-		current = current.right;
-	    } while (current != header);
+	    } else {
+		System.Console.WriteLine("No Solutions!");
+	    }
+
+	    /*
+	    int rows = 10000;
+	    int columns = 100;
+	    Random rand = new Random();
+	    bool[,] bigMatrix = new bool[rows, columns];
+	    for (int row = 0; row < rows; row++)
+		for (int column = 0; column < columns; column++)
+		    bigMatrix[row, column] = (rand.NextDouble() > .5);
+
+	    Stopwatch timer = new Stopwatch();
+	    timer.Start();
+	    bool res = solver.Solve(bigMatrix);
+	    timer.Stop();
+
+	    TimeSpan ts = timer.Elapsed;
+	    string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+					       ts.Hours, ts.Minutes, ts.Seconds,
+					       ts.Milliseconds / 10);
+	    System.Console.WriteLine("Time Taken: " + elapsedTime);
+
+	    if (res) {
+		foreach (var solution in solver.solutions) {
+		    System.Console.WriteLine("{ ");
+		    foreach (int[] row in solution) {
+			System.Console.Write("  [");
+			foreach (int column in row) {
+			    System.Console.Write("" + column + " ");
+			}
+			System.Console.WriteLine("]");
+		    }
+		    System.Console.WriteLine("}");
+		}
+	    } else {
+		System.Console.WriteLine("No Solutions!");
+	    }
+	    */
 
 	    /*
 	    System.Console.WriteLine();

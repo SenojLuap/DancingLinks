@@ -36,6 +36,26 @@ namespace DLX {
 	    return child;
 	}
 
+	
+	/// <summary>
+	///   Remove the column from the matrix.
+	/// </summary>
+	public void Cover() {
+	    RemoveFromRow();
+	    for (Node row = down; row != this; row = row.down)
+		row.RemoveRow();
+	}
+
+
+	/// <summary>
+	///   Return the column to the matrix.
+	/// </summary>
+	public void Uncover() {
+	    for (Node row = up; row != this; row = row.up)
+		row.RestoreRow();
+	    ReturnToRow();
+	}
+
 
 	override public string ToString() {
 	    if (column == -1) return "H";
