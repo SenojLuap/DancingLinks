@@ -1,14 +1,8 @@
 
-namespace DancingLinks {
+namespace DLX {
     public class Node {
 
 
-	/// <summary>
-	///   The node is included.
-	/// </summary>
-	public bool value;
-
-	
 	/// <summary>
 	///   Left sibling.
 	/// </summary>
@@ -32,21 +26,20 @@ namespace DancingLinks {
 	/// </summary>
 	public Node down;
 
+
+	/// <summary>
+	///   The header for the column the node resides in.
+	/// </summary>
+	public Header columnHeader;
+
 	
-	public Node(bool value) {
-	    this.value = value;
-	}
-
-
-	public Node(int value) {
-	    this.value = (value != 0);
-	}
+	public Node() { }
 
 
 	/// <summary>
 	///   Remove this node from the row.
 	/// </summary>
-	public void removeFromRow() {
+	public void RemoveFromRow() {
 	    left.right = right;
 	    right.left = left;
 	}
@@ -55,7 +48,7 @@ namespace DancingLinks {
 	/// <summary>
 	///   Return this node to the row it was removed from.
 	/// </summary>
-	public void returnToRow() {
+	public void ReturnToRow() {
 	    left.right = this;
 	    right.left = this;
 	}
@@ -64,18 +57,38 @@ namespace DancingLinks {
 	/// <summary>
 	///   Remove this node from the column.
 	/// </summary>
-	public void removeFromColumn() {
+	public void RemoveFromColumn() {
 	    up.down = down;
 	    down.up = up;
+	    columnHeader.count--;
 	}
 
 
 	/// <summary>
 	///   Return this node to the column it was removed from.
 	/// </summary>
-	public void returnToColumn() {
+	public void ReturnToColumn() {
+	    columnHeader.count++;
 	    up.down = this;
 	    down.up = this;
+	}
+
+
+	/// <summary>
+	///   Remove this node from all siblings.
+	/// </summary>
+	public void Remove() {
+	    RemoveFromRow();
+	    RemoveFromColumn();
+	}
+
+
+	/// <summary>
+	///   Return this node to the column and row it was removed from.
+	/// </summary>
+	public void Return() {
+	    ReturnToColumn();
+	    ReturnToRow();
 	}
 
 
@@ -139,24 +152,48 @@ namespace DancingLinks {
 		return this;
 	    return up.Up(index-1);
 	}
-	
+
 
 	/// <summary>
-	///   Treat the node as a row, and dump it's contents.
+	///   Dump the contents of this row.
 	/// </summary>
 	public void DumpRow() {
-	    System.Console.Write("" + (value ? 1 : 0) + " ");
-	    if (right != null) right.DumpRow();
-	    else System.Console.WriteLine();
+	    Node current = this;
+	    System.Console.Write("{ ");
+	    do {
+		if (columnHeader == null)
+		    System.Console.Write("? ");
+		else
+		    System.Console.Write("" + current.columnHeader.column + " ");
+		current = current.right;
+	    } while (current != this);
+	    System.Console.WriteLine("}");
 	}
 
-	/// <summary>
-	///   Treat the node as the top-left of matrix. Dump this matrix.
-	/// </summary>
+
 	public void Dump() {
-	    DumpRow();
-	    if (down != null) down.Dump();
+	    
+	    System.Console.WriteLine(ToString());
+	    System.Console.Write("Up: ");
+	    if (up != null) System.Console.WriteLine(up.ToString());
+	    else System.Console.WriteLine("?");
+
+	    System.Console.Write("Down: ");
+	    if (down != null) System.Console.WriteLine(down.ToString());
+	    else System.Console.WriteLine("?");
+
+	    System.Console.Write("Left: ");
+	    if (left != null) System.Console.WriteLine(left.ToString());
+	    else System.Console.WriteLine("?");
+
+	    System.Console.Write("Right: ");
+	    if (right != null) System.Console.WriteLine(right.ToString());
+	    else System.Console.WriteLine("?");
 	}
 
+
+	override public string ToString() {
+	    return "X";
+	}
     }
 }

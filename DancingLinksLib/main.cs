@@ -1,17 +1,17 @@
 using System;
 using System.Collections.Generic;
 
-namespace DancingLinks {
+namespace DLX {
 
-    public class DancingLinksSolver {
+    public class DLXSolver {
 
 	/// <summary>
-	///   The matrix being solved.
+	///   The header for the matrix being solved.
 	/// </summary>
-	public Node matrix;
+	public Header header;
 
 
-	public DancingLinksSolver() {
+	public DLXSolver() {
 	    
 	}
 
@@ -23,36 +23,48 @@ namespace DancingLinks {
 	    int rows = matrix.GetLength(0);
 	    int columns = matrix.GetLength(1);
 
-	    Node controlRow = new Node(true);
-	    Node current = controlRow;
-	    for (int i = 1; i < columns; i++) {
-		Node next = new Node(true);
-		current.right = next;
-		next.left = current;
-		current = next;
-	    }
-	    Node lastRow = controlRow;
+	    if (columns <= 0 || rows <= 0)
+		throw new ArgumentException("Matrix must be at least 1x1", "matrix");
 
-	    for (int row = 0; row < rows; row++) {
-		Node newRow = new Node(matrix[row, 0]);
-		lastRow.down = newRow;
-		newRow.up = lastRow;
+	    header = BuildControlRow(columns);
 
-		current = newRow;
-		for (int column = 1; column < columns; column++) {
-		    Node next = new Node(matrix[row, column]);
-		    current.right = next;
-		    next.left = current;
-		    current = next;
+	    List<Node> toRemove = new List<Node>();
 
-		    Node above = lastRow.Right(column);
-		    above.down = next;
-		    next.up = above;
+	    for (Header column = (Header)header.right;
+		 column != header;
+		 column = (Header)column.right) {
+		for (int row = 0; row < rows; row++) {
+		    Node next = column.AppendDown();
+		    if (!matrix[row, column.column])
+			toRemove.Add(next);
 		}
-		lastRow = newRow;
 	    }
 
-	    return controlRow;
+	    for (Header column = (Header)header.right;
+		 column != header;
+		 column = (Header)column.right) {
+		Node left = column.left;
+		if (left == header)
+		    left = left.left;
+		Node right = column.right;
+		if (right == header)
+		    right = right.right;
+		Node node = column.down;
+		Node leftSibling = left.down;
+		Node rightSibling = right.down;
+		do {
+		    node.left = leftSibling;
+		    node.right = rightSibling;
+		    node = node.down;
+		    leftSibling = leftSibling.down;
+		    rightSibling = rightSibling.down;
+		} while (node != column);
+	    }
+
+	    foreach (Node victim in toRemove)
+		victim.Remove();
+
+	    return header;
 	}
 
 
@@ -65,6 +77,24 @@ namespace DancingLinks {
 		for ( int y = 0; y < matrix.GetLength(1); y++)
 		    converted[x, y] = (matrix[x, y] != 0);
 	    return GetMatrix(converted);
+	}
+
+
+	/// <summary>
+	///   Build the control row.
+	/// </summary>
+	public Header BuildControlRow(int columns) {
+	    Header res = new Header(-1);
+	    Header last = res;
+	    for (int column = 0; column < columns; column++) {
+		Header next = new Header(column);
+		last.right = next;
+		next.left = last;
+		last = next;
+	    }
+	    last.right = res;
+	    res.left = last;
+	    return res;
 	}
     }
 }

@@ -4,23 +4,42 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using DancingLinks;
+using DLX;
 
 namespace DancingLinksLibTest {
     public class Program {
         public static void Main(string[] args) {
 
-	    DancingLinksSolver solver = new DancingLinksSolver();
-
+	    DLXSolver solver = new DLXSolver();
+	    
 	    int[,] matrix = new int[,]
-		{ {0, 0, 0},
-		  {1, 1, 0},
-		  {0, 1, 0},
-		  {1, 0, 1} };
-	    Node res = solver.GetMatrix(matrix);
-	    res.Dump();
-	    System.Console.WriteLine();
+		{ {0, 0, 1, 0, 1, 1, 0},
+		  {1, 0, 0, 1, 0, 0, 1},
+		  {0, 1, 1, 0, 0, 1, 0},
+		  {1, 0, 0, 1, 0, 0, 0},
+		  {0, 1, 0, 0, 0, 0, 1},
+		  {0, 0, 0, 1, 1, 0, 1} };
+		
+	    Node header = solver.GetMatrix(matrix);
+	    Node current = header;
+	    /*
+	    do {
+		current.Dump();
+		current = current.right;
+	    } while (current != header);
+	    */
+	    current = current.right;
+	    do {
+		System.Console.WriteLine("Column: " + ((Header)current).column);
+		System.Console.WriteLine("--Count: " + ((Header)current).count);
+		for (Node row = current.down; row != current; row = row.down) {
+		    row.DumpRow();
+		}
+		current = current.right;
+	    } while (current != header);
 
+	    /*
+	    System.Console.WriteLine();
 
 	    bool[,] boolMatrix = new bool[,]
 		{ { true, false, false},
@@ -28,7 +47,11 @@ namespace DancingLinksLibTest {
 		  { true, false, true},
 		  { false, false, false} };
 	    res = solver.GetMatrix(boolMatrix);
-	    res.Dump();
+	    res = res.right;
+
+	    for (Node row = res.down; row != res; row = row.down)
+		row.DumpRow();
+	    */
         }
     }
 }
